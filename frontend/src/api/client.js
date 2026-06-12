@@ -19,7 +19,13 @@ async function request(path, options = {}) {
 export const api = {
   health: () => request("/health"),
   listGrades: () => request("/grades"),
-  analyzeGrades: () => request("/grades/analysis"),
+  analyzeGrades: (params) => {
+    const qs = new URLSearchParams();
+    if (params?.class) qs.set("class", params.class);
+    const query = qs.toString();
+    return request(`/grades/analysis${query ? `?${query}` : ""}`);
+  },
+  listClasses: () => request("/grades/classes"),
   createGrade: (payload) =>
     request("/grades", {
       method: "POST",

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from ..models import Grade
-from ..services.grade_service import analyze_grades, create_grade, list_grades, update_grade
+from ..services.grade_service import analyze_grades, create_grade, list_classes, list_grades, update_grade
 from ..utils.validation import require_fields, validate_score
 
 grades_bp = Blueprint("grades", __name__)
@@ -14,7 +14,13 @@ def index():
 
 @grades_bp.get("/analysis")
 def analysis():
-    return jsonify(analyze_grades())
+    class_name = request.args.get("class")
+    return jsonify(analyze_grades(class_name))
+
+
+@grades_bp.get("/classes")
+def classes():
+    return jsonify(list_classes())
 
 
 @grades_bp.post("")

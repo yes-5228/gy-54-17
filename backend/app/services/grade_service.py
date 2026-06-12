@@ -75,8 +75,12 @@ def get_transcript(student_no):
     }
 
 
-def analyze_grades():
-    all_grades = Grade.query.all()
+def analyze_grades(class_name=None):
+    query = Grade.query
+    if class_name:
+        query = query.join(Student).filter(Student.class_name == class_name)
+
+    all_grades = query.all()
     if not all_grades:
         return []
 
@@ -124,3 +128,8 @@ def analyze_grades():
 
     result.sort(key=lambda x: (x["semester"], x["courseCode"]), reverse=True)
     return result
+
+
+def list_classes():
+    class_names = [c[0] for c in Student.query.with_entities(Student.class_name).filter(Student.class_name != "").distinct().order_by(Student.class_name).all()]
+    return class_names

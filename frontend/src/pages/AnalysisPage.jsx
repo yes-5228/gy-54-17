@@ -100,15 +100,26 @@ function CourseCard({ data }) {
 
 export default function AnalysisPage() {
   const [data, setData] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState(null);
   const [semester, setSemester] = useState("");
+  const [className, setClassName] = useState("");
   const [keyword, setKeyword] = useState("");
+
+  const loadClasses = async () => {
+    try {
+      const result = await api.listClasses();
+      setClasses(result);
+    } catch (error) {
+      // ignore
+    }
+  };
 
   const load = async () => {
     setLoading(true);
     try {
-      const result = await api.analyzeGrades();
+      const result = await api.analyzeGrades({ class: className || undefined });
       setData(result);
     } catch (error) {
       setNotice({ type: "error", message: error.message });
@@ -118,8 +129,12 @@ export default function AnalysisPage() {
   };
 
   useEffect(() => {
-    load().catch(() => {});
+    loadClasses().catch(() => {});
   }, []);
+
+  useEffect(() => {
+    load().catch(() => {});
+  }, [className]);
 
   const semesters = useMemo(() => {
     const set = new Set(data.map((d) => d.semester));
@@ -149,12 +164,14 @@ export default function AnalysisPage() {
     const passSum = filtered.reduce((s, c) => s + (c.passRate * c.studentCount) / 100, 0);
     const overallPass = totalStudents ? ((passSum / totalStudents) * 100).toFixed(2) : 0;
     const max = Math.max(...filtered.map((c) => c.maxScore));
+    const min = Math.min(...filtered.map((c) => c.minScore));
     return {
       courseCount: filtered.length,
       totalStudents,
       avgScore,
       overallPass,
       max,
+      min,
     };
   }, [filtered]);
 
@@ -163,7 +180,7 @@ export default function AnalysisPage() {
       <header className="page-header">
         <div>
           <h1>班级成绩分析</h1>
-          <p>按课程展示平均分、及格率、最高分与分数段分布。</p>
+          <p>按课程展示平均分、及格率、最高分、最低分与分数段分布。</p>
         </div>
         <button className="primary-action inline-btn" onClick={load} disabled={loading}>
           <RefreshCw size={16} className={loading ? "spinning" : ""} />
@@ -175,6 +192,17 @@ export default function AnalysisPage() {
 
       <div className="panel">
         <div className="filter-bar">
+          <div className="filter-item">
+            <label>班级</label>
+            <select value={className} onChange={(e) => setClassName(e.target.value)}>
+              <option value="">全部班级</option>
+              {classes.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="filter-item">
             <label>学期</label>
             <select value={semester} onChange={(e) => setSemester(e.target.value)}>
@@ -218,6 +246,10 @@ export default function AnalysisPage() {
           <div className="metric">
             <span>全局最高分</span>
             <strong>{overall.max}</strong>
+          </div>
+          <div className="metric">
+            <span>全局最低分</span>
+            <strong>{overall.min}</strong>
           </div>
         </div>
       )}

@@ -398,7 +398,7 @@ blockquote {
 .filter-bar {
   display: grid;
   gap: 14px;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 220px 220px 1fr;
   align-items: end;
 }
 
@@ -413,7 +413,7 @@ blockquote {
 }
 
 .summary-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 .course-list {
