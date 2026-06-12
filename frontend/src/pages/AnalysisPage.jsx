@@ -128,7 +128,7 @@ export default function AnalysisPage() {
         const classLabel = className || "全部班级";
         setNotice({
           type: "info",
-          message: `${classLabel} 没有 ${semester} 学期的数据，已自动切换为全部学期。`,
+          message: `${classLabel} 没有 ${semester} 学期的成绩记录，已自动切换为全部学期。`,
         });
       }
     } catch (error) {
