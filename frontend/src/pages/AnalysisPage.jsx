@@ -125,10 +125,10 @@ export default function AnalysisPage() {
       const availableSemesters = [...new Set(result.map((d) => d.semester))];
       if (semester && !availableSemesters.includes(semester)) {
         setSemester("");
-        const classLabel = className || "全部班级";
+        const prefix = className ? `${className} ` : "";
         setNotice({
           type: "info",
-          message: `${classLabel} 没有 ${semester} 学期的成绩记录，已自动切换为全部学期。`,
+          message: `${prefix}没有 ${semester} 学期的成绩记录，已自动切换为全部学期。`,
         });
       }
     } catch (error) {
