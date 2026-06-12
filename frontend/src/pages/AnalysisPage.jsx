@@ -121,6 +121,16 @@ export default function AnalysisPage() {
     try {
       const result = await api.analyzeGrades({ class: className || undefined });
       setData(result);
+
+      const availableSemesters = [...new Set(result.map((d) => d.semester))];
+      if (semester && !availableSemesters.includes(semester)) {
+        setSemester("");
+        const classLabel = className || "全部班级";
+        setNotice({
+          type: "info",
+          message: `${classLabel} 没有 ${semester} 学期的数据，已自动切换为全部学期。`,
+        });
+      }
     } catch (error) {
       setNotice({ type: "error", message: error.message });
     } finally {
