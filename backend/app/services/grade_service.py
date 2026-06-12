@@ -73,3 +73,54 @@ def get_transcript(student_no):
         "summary": calculate_summary(grades),
         "grades": [grade.to_dict() for grade in grades],
     }
+
+
+def analyze_grades():
+    all_grades = Grade.query.all()
+    if not all_grades:
+        return []
+
+    course_map = {}
+    for grade in all_grades:
+        key = (grade.course_code, grade.course_name, grade.semester, grade.teacher, grade.credit)
+        if key not in course_map:
+            course_map[key] = []
+        course_map[key].append(grade)
+
+    def count_in_range(scores, low, high):
+        return sum(1 for s in scores if low <= s < high)
+
+    result = []
+    for (code, name, semester, teacher, credit), grades in course_map.items():
+        scores = [g.score for g in grades]
+        count = len(scores)
+        avg = round(sum(scores) / count, 2) if count else 0
+        max_score = round(max(scores), 2) if scores else 0
+        min_score = round(min(scores), 2) if scores else 0
+        pass_count = sum(1 for s in scores if s >= 60)
+        pass_rate = round(pass_count / count * 100, 2) if count else 0
+
+        distribution = {
+            "range0_59": count_in_range(scores, 0, 60),
+            "range60_69": count_in_range(scores, 60, 70),
+            "range70_79": count_in_range(scores, 70, 80),
+            "range80_89": count_in_range(scores, 80, 90),
+            "range90_100": count_in_range(scores, 90, 101),
+        }
+
+        result.append({
+            "courseCode": code,
+            "courseName": name,
+            "semester": semester,
+            "teacher": teacher,
+            "credit": credit,
+            "studentCount": count,
+            "average": avg,
+            "maxScore": max_score,
+            "minScore": min_score,
+            "passRate": pass_rate,
+            "distribution": distribution,
+        })
+
+    result.sort(key=lambda x: (x["semester"], x["courseCode"]), reverse=True)
+    return result

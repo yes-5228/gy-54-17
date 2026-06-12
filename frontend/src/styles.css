@@ -390,6 +390,146 @@ blockquote {
   color: #be123c;
 }
 
+.inline-btn {
+  grid-column: auto;
+  width: auto;
+}
+
+.filter-bar {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 240px 1fr;
+  align-items: end;
+}
+
+.filter-item {
+  display: grid;
+  gap: 7px;
+}
+
+.filter-item label {
+  color: #475569;
+  font-size: 14px;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.course-list {
+  display: grid;
+  gap: 18px;
+}
+
+.course-card {
+  display: grid;
+  gap: 18px;
+}
+
+.course-head {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 14px;
+}
+
+.course-title {
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.course-meta {
+  color: #64748b;
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+
+.analysis-metrics .metric span {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.metric-icon {
+  color: #94a3b8;
+}
+
+.metric-warn {
+  color: #be123c;
+}
+
+.dist-section {
+  display: grid;
+  gap: 12px;
+}
+
+.dist-title {
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dist-wrap {
+  display: grid;
+  gap: 10px;
+}
+
+.dist-row {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 90px 1fr 120px;
+}
+
+.dist-label {
+  align-items: center;
+  color: #475569;
+  display: inline-flex;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.dist-dot {
+  border-radius: 4px;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
+.dist-bar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.dist-bar-fill {
+  border-radius: 4px;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.dist-count {
+  text-align: right;
+  font-size: 13px;
+}
+
+.dist-count strong {
+  color: #0f172a;
+  margin-right: 4px;
+}
+
+.dist-count span {
+  color: #94a3b8;
+}
+
+.spinning {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @media (max-width: 960px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -423,5 +563,17 @@ blockquote {
   .search-bar,
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .filter-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .dist-row {
+    grid-template-columns: 80px 1fr 100px;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

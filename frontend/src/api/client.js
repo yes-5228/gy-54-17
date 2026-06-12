@@ -19,6 +19,7 @@ async function request(path, options = {}) {
 export const api = {
   health: () => request("/health"),
   listGrades: () => request("/grades"),
+  analyzeGrades: () => request("/grades/analysis"),
   createGrade: (payload) =>
     request("/grades", {
       method: "POST",

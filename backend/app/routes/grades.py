@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from ..models import Grade
-from ..services.grade_service import create_grade, list_grades, update_grade
+from ..services.grade_service import analyze_grades, create_grade, list_grades, update_grade
 from ..utils.validation import require_fields, validate_score
 
 grades_bp = Blueprint("grades", __name__)
@@ -10,6 +10,11 @@ grades_bp = Blueprint("grades", __name__)
 @grades_bp.get("")
 def index():
     return jsonify([grade.to_dict() for grade in list_grades()])
+
+
+@grades_bp.get("/analysis")
+def analysis():
+    return jsonify(analyze_grades())
 
 
 @grades_bp.post("")
